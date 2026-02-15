@@ -5,7 +5,7 @@ An AI-powered writing assistant extension for LibreOffice Writer. Uses a local [
 ## Demo
 
 <!-- Replace the URL below with the one GitHub generates when you drag-drop the video into an Issue -->
-https://github.com/user-attachments/assets/REPLACE_WITH_YOUR_VIDEO_URL
+[https://github.com/user-attachments/assets/REPLACE_WITH_YOUR_VIDEO_URL](https://github.com/user-attachments/assets/7968880b-92bb-4933-8c74-829bfa1d5b9d)
 
 ## Features
 
