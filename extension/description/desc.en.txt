@@ -1,0 +1,13 @@
+AI-powered writing assistant for LibreOffice Writer.
+
+Features:
+• Rewrite text with adjustable tone (Formal, Concise, Academic)
+• Summarize text to 30-40% of original length
+• Fix grammar, spelling, and punctuation
+• Translate text to any language
+• Continue writing in the same style
+• Simplify complex text to plain language
+• Custom prompts for any AI task
+• Editable result preview before applying
+
+Requires a local Ollama server running at http://localhost:11434.
