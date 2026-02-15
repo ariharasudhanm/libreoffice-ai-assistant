@@ -1,6 +1,3 @@
-# Build output
-*.oxt
-
 # Python
 __pycache__/
 *.pyc

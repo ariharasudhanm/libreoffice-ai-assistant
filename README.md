@@ -2,6 +2,12 @@
 
 An AI-powered writing assistant extension for LibreOffice Writer. Uses a local [Ollama](https://ollama.com) server to rewrite, summarize, translate, fix grammar, and more — all without sending your data to the cloud.
 
+## Demo
+
+<video src="AI_Assistant_demo.mp4" width="100%" controls>
+  Your browser does not support the video tag. <a href="AI_Assistant_demo.mp4">Download the demo video</a>.
+</video>
+
 ## Features
 
 | Action | Description |
@@ -43,7 +49,7 @@ All actions include an **editable Result Preview** — review and clean up the A
 ### From Source
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/libreoffice-ai-assistant.git
+git clone https://github.com/ariharasudhanm/libreoffice-ai-assistant.git
 cd libreoffice-ai-assistant
 ./build_extension.sh
 ```
