@@ -4,9 +4,8 @@ An AI-powered writing assistant extension for LibreOffice Writer. Uses a local [
 
 ## Demo
 
-<video src="AI_Assistant_demo.mp4" width="100%" controls>
-  Your browser does not support the video tag. <a href="AI_Assistant_demo.mp4">Download the demo video</a>.
-</video>
+<!-- Replace the URL below with the one GitHub generates when you drag-drop the video into an Issue -->
+https://github.com/user-attachments/assets/REPLACE_WITH_YOUR_VIDEO_URL
 
 ## Features
 
