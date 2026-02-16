@@ -1,6 +1,6 @@
 # LibreOffice AI Assistant
 
-An AI-powered writing assistant extension for LibreOffice Writer. Uses a local [Ollama](https://ollama.com) server to rewrite, summarize, translate, fix grammar, and more — all without sending your data to the cloud.
+An AI-powered writing assistant extension for LibreOffice Writer. Uses a local AI server ([Ollama](https://ollama.com) or [LM Studio](https://lmstudio.ai)) to rewrite, summarize, translate, fix grammar, and more — all without sending your data to the cloud.
 
 ## Demo
 
@@ -24,15 +24,19 @@ All actions include an **editable Result Preview** — review and clean up the A
 ## Prerequisites
 
 1. **LibreOffice** (tested on Linux, should work on macOS/Windows)
-2. **Ollama** — install from [ollama.com](https://ollama.com)
-3. **A language model** — pull one with:
+2. **An AI backend** — choose one (or both):
+
+   **Option A: Ollama** (recommended)
    ```bash
+   # Install from https://ollama.com, then:
    ollama pull llama3.2
-   ```
-4. **Ollama running** — start the server:
-   ```bash
    ollama serve
    ```
+
+   **Option B: LM Studio**
+   - Download from [lmstudio.ai](https://lmstudio.ai)
+   - Load a model in the app
+   - Start the local server (runs on `localhost:1234`)
 
 ## Installation
 
@@ -76,25 +80,38 @@ Then install the generated `lo-ai-assistant.oxt` as described above.
 
 ## Configuration
 
-By default, the extension connects to Ollama at `http://localhost:11434` using the `llama3.2` model with a 120-second timeout.
+The dialog includes an **AI Backend** selector at the top to switch between Ollama and LM Studio.
+
+| Backend | Default URL | Default Model |
+|---|---|---|
+| **Ollama** | `http://localhost:11434` | `llama3.2` |
+| **LM Studio** | `http://localhost:1234` | (auto-detected) |
 
 To change these defaults, edit `extension/pythonpath/ollama_client.py`:
 
 ```python
-DEFAULT_URL   = "http://localhost:11434"
-DEFAULT_MODEL = "llama3.2"
-DEFAULT_TIMEOUT = 120
+BACKENDS = {
+    "ollama": {
+        "url": "http://localhost:11434/api/generate",
+        "model": "llama3.2",
+    },
+    "lmstudio": {
+        "url": "http://127.0.0.1:1234/v1/chat/completions",
+        "model": "default",
+    },
+}
 ```
 
 ## Troubleshooting
 
 | Problem | Solution |
 |---|---|
-| "Cannot reach Ollama" | Make sure Ollama is running: `ollama serve` |
-| "Timed out" | Try shorter text, or increase `DEFAULT_TIMEOUT` |
+| "Cannot reach AI server" | Make sure Ollama (`ollama serve`) or LM Studio server is running |
+| "Timed out" | Try shorter text, or increase `DEFAULT_TIMEOUT_S` in `ollama_client.py` |
 | Menu doesn't appear | Restart LibreOffice completely (all windows) |
 | Extension won't install | Close ALL LibreOffice windows first, then try again |
 | Nothing happens on Generate | Check that you have text selected in the document |
+| Wrong backend selected | Check the **AI Backend** selector at the top of the dialog |
 
 ## Project Structure
 
@@ -102,7 +119,7 @@ DEFAULT_TIMEOUT = 120
 extension/
 ├── ai_assistant.py              # Main extension: UNO component + dialog UI
 ├── pythonpath/
-│   ├── ollama_client.py         # Ollama API client
+│   ├── ollama_client.py         # AI backend client (Ollama + LM Studio)
 │   └── prompts.py               # Prompt templates for all actions
 ├── registry/
 │   └── Addons.xcu               # Menu configuration

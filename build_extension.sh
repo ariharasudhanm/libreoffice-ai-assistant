@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 
 echo "Building LibreOffice AI Assistant Extension v1.0.0..."
 
-# Clean old build
+# Clean old build #
 rm -f lo-ai-assistant.oxt
 
 # Package the extension

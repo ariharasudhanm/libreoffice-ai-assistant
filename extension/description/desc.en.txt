@@ -10,4 +10,4 @@ Features:
 • Custom prompts for any AI task
 • Editable result preview before applying
 
-Requires a local Ollama server running at http://localhost:11434.
+Requires a local AI server: Ollama (localhost:11434) or LM Studio (localhost:1234).

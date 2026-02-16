@@ -31,7 +31,7 @@ def _ensure_pythonpath():
 
 _ensure_pythonpath()
 
-from ollama_client import generate as ollama_generate
+from ollama_client import generate as ai_generate, BACKENDS
 from prompts import build_prompt
 
 
@@ -160,6 +160,11 @@ class _DialogHandler(unohelper.Base, XActionListener):
 
     def _get_custom_instructions(self):
         return self._dialog.getControl("custom_box").getText().strip()
+
+    def _get_backend(self):
+        if self._dialog.getControl("backend_lmstudio").getState():
+            return "lmstudio"
+        return "ollama"
 
     def _get_tone(self):
         if self._dialog.getControl("tone_concise").getState():
@@ -314,9 +319,13 @@ class _DialogHandler(unohelper.Base, XActionListener):
                 "continue": "Continuing", "simplify": "Simplifying",
                 "custom": "Processing",
             }
-            self._set_status(f"{labels.get(action, 'Processing')} {words} words...")
+            backend = self._get_backend()
+            backend_label = BACKENDS[backend]["label"]
+            self._set_status(
+                f"{labels.get(action, 'Processing')} {words} words "
+                f"via {backend_label}...")
             prompt = build_prompt(action, tone, text, custom)
-            result = ollama_generate(prompt)
+            result = ai_generate(prompt, backend=backend)
             self._last_action = action
             self._last_output = result
             self._set_preview(result)
@@ -332,9 +341,9 @@ class _DialogHandler(unohelper.Base, XActionListener):
         except Exception as e:
             err_msg = str(e)
             if "timed out" in err_msg.lower():
-                self._set_status("Timed out — try shorter text or check Ollama")
+                self._set_status("Timed out — try shorter text or check your AI server")
             elif "failed to reach" in err_msg.lower():
-                self._set_status("Cannot reach Ollama — is it running?")
+                self._set_status("Cannot reach AI server — is it running?")
             else:
                 self._set_status(f"Error: {err_msg[:60]}")
             self._last_output = ""
@@ -656,10 +665,30 @@ class AIAssistant(unohelper.Base, XJobExecutor):
             m.Orientation = 0  # horizontal
             model.insertByName(name, m)
 
+        def add_listbox(name, items, x, y, w, h, selected=0):
+            m = model.createInstance(
+                "com.sun.star.awt.UnoControlListBoxModel")
+            m.Name = name
+            m.PositionX = x
+            m.PositionY = y
+            m.Width = w
+            m.Height = h
+            m.Dropdown = True
+            m.LineCount = len(items)
+            m.StringItemList = tuple(items)
+            model.insertByName(name, m)
+
         # ---- layout ----
         X = 8
         W = DLG_W - 16  # content width with margin
         Y = 4
+
+        # == Section 0: Backend selector ==
+        add_groupbox("backend_group", "AI Backend", X, Y, W, 24)
+        add_radio("backend_ollama", "Ollama", X + 8, Y + 12, 60,
+                  selected=True)
+        add_radio("backend_lmstudio", "LM Studio", X + 75, Y + 12, 70)
+        Y += 28
 
         # == Section 1: Selected Text ==
         add_label("sel_title", "Selected Text:", X, Y, W, 10)
